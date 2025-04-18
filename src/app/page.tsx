@@ -46,12 +46,14 @@ const testimonials = [
     content: "İşYorum sayesinde şehrimde en kaliteli restoranları kolayca bulabiliyorum. Kullanıcı yorumları çok yardımcı oluyor!",
     author: "Ayşe K.",
     role: "Aktif Kullanıcı",
+    rating: 5
   },
   {
     id: 2,
     content: "İşletme sahibi olarak platformdaki geri bildirimler sayesinde hizmet kalitemizi sürekli artırıyoruz.",
     author: "Mehmet A.",
     role: "İşletme Sahibi",
+    rating: 4
   },
 ]
 
