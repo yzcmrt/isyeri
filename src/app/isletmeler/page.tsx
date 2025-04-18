@@ -69,7 +69,7 @@ export default function Isletmeler() {
                   <div className="absolute top-3 left-3">
                     <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow">
                       <Image 
-                        src={isletme.logo} 
+                        src={isletme.logo.includes('freepik.com') ? '/images/default-logo.png' : isletme.logo} 
                         alt={`${isletme.ad} Logo`} 
                         width={32} 
                         height={32}

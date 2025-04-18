@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
+import { Navbar } from '@/components/navbar';
+import { Footer } from '@/components/footer';
 import { ArrowLeftIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { kategoriler } from '@/data/mock-data';
 
