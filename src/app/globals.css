@@ -1,26 +1,433 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@500;600;700&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-display: 'Manrope', 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  --font-mono: 'Fira Code', 'SF Mono', SFMono-Regular, 'Consolas', 'Liberation Mono', Menlo, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* AÇIK TEMA */
+    --background: #FAFAFA;
+    --foreground: #212529;
+    --primary: #2E5FDB;
+    --primary-hover: #1E48B2;
+    --secondary: #FF7E67;
+    --secondary-hover: #FF6347;
+    --card-bg: #FFFFFF;
+    --text-body: #495057;
+    --text-muted: #6C757D;
+    --border: #E9ECEF;
+    --border-hover: #CED4DA;
+    --success: #28A745;
+    --success-hover: #218838;
+    --warning: #FFC107;
+    --warning-hover: #E0A800;
+    --error: #DC3545;
+    --error-hover: #C82333;
+    --star-color: #F59E0B;
+    --star-bg: #E5E7EB;
+    --primary-light: rgba(46, 95, 219, 0.1);
+    --secondary-light: rgba(255, 126, 103, 0.1);
+    --overlay: rgba(0, 0, 0, 0.5);
+    --overlay-light: rgba(0, 0, 0, 0.1);
+  }
+
+  .dark {
+    /* KOYU TEMA */
+    --background: #121212;
+    --foreground: #F8F9FA;
+    --primary: #4285F4;
+    --primary-hover: #5A96FF;
+    --secondary: #FF8A80;
+    --secondary-hover: #FF9E8F;
+    --card-bg: #1E1E1E;
+    --text-body: #CED4DA;
+    --text-muted: #ADB5BD;
+    --border: #343A40;
+    --border-hover: #495057;
+    --success: #4CAF50;
+    --success-hover: #5CB85C;
+    --warning: #FFEB3B;
+    --warning-hover: #FFF176;
+    --error: #F44336;
+    --error-hover: #EF5350;
+    --star-color: #FCD34D;
+    --star-bg: #374151;
+    --primary-light: rgba(66, 133, 244, 0.15);
+    --secondary-light: rgba(255, 138, 128, 0.15);
+    --overlay: rgba(0, 0, 0, 0.75);
+    --overlay-light: rgba(255, 255, 255, 0.05);
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--text-body)];
+    font-family: var(--font-primary);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--foreground);
+  }
+
+  code, pre {
+    font-family: var(--font-mono);
   }
 }
 
-body {
-  background: var(--background);
+@layer components {
+  /* Ana Butonlar */
+  .btn-primary {
+    @apply bg-[var(--primary)] text-white px-4 py-2 rounded-md font-medium 
+      transition-all duration-200 hover:bg-[var(--primary-hover)] focus:ring-2 
+      focus:ring-[var(--primary)] focus:ring-opacity-50 focus:outline-none;
+  }
+  
+  .btn-outline {
+    @apply border border-[var(--primary)] text-[var(--primary)]
+      px-4 py-2 rounded-md font-medium transition-all duration-200 
+      hover:bg-[var(--primary)] hover:text-white focus:ring-2 
+      focus:ring-[var(--primary)] focus:ring-opacity-50 focus:outline-none;
+  }
+
+  .btn-secondary {
+    @apply bg-[var(--secondary)] text-white px-4 py-2 rounded-md font-medium
+      transition-all duration-200 hover:bg-[var(--secondary-hover)] focus:ring-2
+      focus:ring-[var(--secondary)] focus:ring-opacity-50 focus:outline-none;
+  }
+
+  .btn-white {
+    @apply bg-white text-[var(--primary)] hover:bg-gray-100 
+      px-4 py-2 rounded-md font-medium transition-all duration-200
+      dark:bg-[var(--card-bg)] dark:text-white dark:hover:bg-[var(--border)]
+      focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:outline-none;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent border border-white text-white 
+      hover:bg-[rgba(255,255,255,0.1)] px-4 py-2 rounded-md 
+      font-medium transition-all duration-200 focus:ring-2
+      focus:ring-white focus:ring-opacity-50 focus:outline-none;
+  }
+
+  .btn-success {
+    @apply bg-[var(--success)] text-white px-4 py-2 rounded-md font-medium
+      transition-all duration-200 hover:bg-[var(--success-hover)] focus:ring-2
+      focus:ring-[var(--success)] focus:ring-opacity-50 focus:outline-none;
+  }
+
+  .btn-danger {
+    @apply bg-[var(--error)] text-white px-4 py-2 rounded-md font-medium
+      transition-all duration-200 hover:bg-[var(--error-hover)] focus:ring-2
+      focus:ring-[var(--error)] focus:ring-opacity-50 focus:outline-none;
+  }
+
+  /* Kategori Kartları */
+  .category-card {
+    @apply bg-[var(--card-bg)] p-6 rounded-lg shadow-sm 
+      hover:shadow-md transition-all duration-200 text-center
+      border border-[var(--border)] hover:border-[var(--primary)];
+  }
+
+  .category-card h3 {
+    @apply font-medium text-[var(--foreground)] transition-colors duration-200;
+  }
+  
+  .group:hover .category-card h3 {
+    @apply text-[var(--primary)];
+  }
+
+  .category-card p {
+    @apply text-sm text-[var(--text-muted)] mt-2;
+  }
+
+  /* İşletme Kartları */
+  .business-card {
+    @apply bg-[var(--card-bg)] rounded-lg shadow-md overflow-hidden 
+      hover:shadow-lg transition-all duration-200
+      border border-[var(--border)] hover:border-[var(--primary)];
+  }
+
+  .business-card h3 {
+    @apply font-medium text-lg text-[var(--foreground)] transition-colors duration-200;
+  }
+  
+  .group:hover .business-card h3 {
+    @apply text-[var(--primary)];
+  }
+
+  .business-card-rating {
+    @apply flex items-center;
+  }
+
+  .business-card-rating .stars {
+    @apply text-[var(--star-color)];
+  }
+
+  .business-card-rating .count {
+    @apply text-sm text-[var(--text-muted)];
+  }
+
+  .business-card .location {
+    @apply text-sm text-[var(--text-muted)] mt-4 flex items-center;
+  }
+
+  .business-card .location svg {
+    @apply text-[var(--primary)] mr-1;
+  }
+
+  .business-card .features {
+    @apply flex flex-wrap gap-2 mt-3;
+  }
+
+  .business-card .feature-tag {
+    @apply inline-block px-2 py-1 text-xs rounded-full
+      bg-[var(--border)] text-[var(--text-body)];
+  }
+
+  /* Linkler */
+  .link-primary {
+    @apply text-[var(--primary)] hover:text-[var(--primary-hover)] 
+      transition-colors duration-200 hover:underline;
+  }
+
+  .link-with-arrow {
+    @apply inline-flex items-center text-[var(--primary)] 
+      hover:text-[var(--primary-hover)] transition-all duration-200
+      hover:underline;
+  }
+
+  .link-with-arrow svg {
+    @apply ml-2 h-4 w-4 transition-transform duration-200;
+  }
+  
+  .group:hover .link-with-arrow svg {
+    @apply translate-x-1;
+  }
+
+  .footer-link {
+    @apply text-[var(--text-body)] hover:text-[var(--primary)] 
+      transition-colors duration-200;
+  }
+
+  /* Section Backgrounds */
+  .section-primary {
+    @apply py-16 bg-[var(--primary)] text-white;
+  }
+
+  .section-light {
+    @apply py-16 bg-[var(--background)];
+  }
+
+  .section-dark {
+    @apply py-16 bg-[var(--foreground)] text-white;
+  }
+
+  .section-card {
+    @apply py-16 bg-[var(--card-bg)] border-t border-b border-[var(--border)];
+  }
+
+  /* Forms */
+  .form-input {
+    @apply w-full p-3 border border-[var(--border)] rounded-md 
+      bg-[var(--card-bg)] text-[var(--text-body)]
+      focus:ring-2 focus:ring-[var(--primary)] focus:border-[var(--primary)]
+      focus:outline-none transition-all duration-200;
+  }
+
+  .form-label {
+    @apply block text-[var(--foreground)] font-medium mb-2;
+  }
+
+  .form-error {
+    @apply text-[var(--error)] text-sm mt-1;
+  }
+
+  .form-select {
+    @apply w-full p-3 border border-[var(--border)] rounded-md 
+      bg-[var(--card-bg)] text-[var(--text-body)]
+      focus:ring-2 focus:ring-[var(--primary)] focus:border-[var(--primary)]
+      focus:outline-none transition-all duration-200;
+  }
+
+  .form-checkbox {
+    @apply h-5 w-5 text-[var(--primary)] border-[var(--border)] rounded
+      focus:ring-[var(--primary)] focus:ring-opacity-25;
+  }
+
+  /* Kartlar ve Konteynırlar */
+  .card {
+    @apply bg-[var(--card-bg)] rounded-lg shadow-md p-6 border border-[var(--border)];
+  }
+
+  .container-custom {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Yıldız Derecelendirme */
+  .rating-stars {
+    @apply flex;
+  }
+
+  .rating-stars .star {
+    @apply text-[var(--star-color)];
+  }
+
+  .rating-stars .star-empty {
+    @apply text-[var(--star-bg)];
+  }
+
+  /* Badge ve Etiketler */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-[var(--primary-light)] text-[var(--primary)];
+  }
+
+  .badge-secondary {
+    @apply bg-[var(--secondary-light)] text-[var(--secondary)];
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-[var(--success)] dark:bg-green-900 dark:bg-opacity-20;
+  }
+
+  .badge-error {
+    @apply bg-red-100 text-[var(--error)] dark:bg-red-900 dark:bg-opacity-20;
+  }
+
+  /* Navigasyon */
+  .nav-link {
+    @apply text-[var(--text-body)] hover:text-[var(--primary)] 
+      transition-colors duration-200 px-3 py-2 rounded-md;
+  }
+
+  .nav-link-active {
+    @apply text-[var(--primary)] font-medium;
+  }
+
+  .nav-dropdown {
+    @apply absolute right-0 mt-2 w-48 bg-[var(--card-bg)] rounded-md shadow-lg py-1
+      border border-[var(--border)] z-10;
+  }
+
+  .nav-dropdown-item {
+    @apply block px-4 py-2 text-sm text-[var(--text-body)] hover:bg-[var(--background)]
+      hover:text-[var(--primary)] transition-colors duration-150;
+  }
+
+  /* Hero Sections */
+  .hero-overlay {
+    @apply absolute inset-0 bg-[var(--overlay)];
+  }
+
+  .hero-content {
+    @apply relative z-10 text-white;
+  }
+
+  /* Gradient Backgrounds */
+  .gradient-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  }
+
+  .gradient-secondary {
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-hover) 100%);
+  }
+
+  .gradient-light {
+    background: linear-gradient(135deg, var(--background) 0%, var(--card-bg) 100%);
+  }
+
+  .gradient-dark {
+    background: linear-gradient(135deg, var(--background) 0%, var(--card-bg) 100%);
+  }
+
+  /* Dividers */
+  .divider {
+    @apply h-px w-full bg-[var(--border)] my-6;
+  }
+
+  .divider-vertical {
+    @apply w-px h-full bg-[var(--border)] mx-6;
+  }
+}
+
+/* Genel kullanılan yardımcı CSS sınıfları */
+.bg-light-background {
+  background-color: var(--background);
+}
+
+.text-light-text {
+  color: var(--text-body);
+}
+
+.bg-dark-background {
+  background-color: var(--card-bg);
+}
+
+.text-dark-text {
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.bg-light-button-bg {
+  background-color: var(--primary);
+}
+
+.text-light-button-text {
+  color: white;
+}
+
+.bg-dark-button-bg {
+  background-color: var(--primary);
+}
+
+.text-dark-button-text {
+  color: white;
+}
+
+.border-light-button-bg {
+  border-color: var(--primary);
+}
+
+.border-dark-button-bg {
+  border-color: var(--primary);
+}
+
+/* Animasyonlar */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.4s ease-out;
 }
