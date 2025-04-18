@@ -290,7 +290,7 @@ export default function Home() {
         <div className="container-custom text-center">
           <h2 className="text-3xl font-bold text-white">Hemen Katılın</h2>
           <p className="mt-4 text-white/80 max-w-2xl mx-auto">
-            İşletmeleri keşfedin, yorumlayın ve deneyimlerinizi paylaşın. İşYorum'la kaliteli hizmet almanın ve doğru bilgiye ulaşmanın keyfini çıkarın.
+            İşletmeleri keşfedin, yorumlayın ve deneyimlerinizi paylaşın. İşYorum&apos;la kaliteli hizmet almanın ve doğru bilgiye ulaşmanın keyfini çıkarın.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/kayit" className="btn-white px-8 py-3">

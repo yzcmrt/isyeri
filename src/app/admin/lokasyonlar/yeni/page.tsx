@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { ArrowLeftIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Navbar } from '@/components/navbar';
+import { Footer } from '@/components/footer';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { isletmeler } from '@/data/mock-data';
 
 const turkiyeIlleri = [
@@ -169,22 +169,21 @@ export default function YeniLokasyon() {
             <div className="space-y-6">
               {/* İşletme Seçimi */}
               <div>
-                <label htmlFor="isletmeId" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="isletme" className="block text-sm font-medium text-gray-700 mb-1">
                   İşletme
                 </label>
                 <select
-                  id="isletmeId"
-                  name="isletmeId"
+                  id="isletme"
+                  name="isletme"
                   value={formData.isletmeId}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 ${errors.isletmeId ? 'border-red-500' : 'border-gray-300'}`}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 border-gray-300"
                 >
                   <option value="">İşletme Seçin</option>
                   {isletmeler.map(isletme => (
                     <option key={isletme.id} value={isletme.id}>{isletme.ad}</option>
                   ))}
                 </select>
-                {errors.isletmeId && <p className="mt-1 text-sm text-red-600">{errors.isletmeId}</p>}
               </div>
               
               {/* Şube Bilgileri */}
@@ -206,7 +205,10 @@ export default function YeniLokasyon() {
                       placeholder="Örn: Merkez, Avm, Şube 2, vb."
                     />
                     <p className="mt-1 text-xs text-gray-500">
-                      Boş bırakırsanız, "Merkez Şube" olarak kabul edilir.
+                      İşletme ile ilgili ek bilgi ve açıklamalar gelecekte burada görüntülenecektir.
+                    </p>
+                    <p className="mt-3 text-sm text-amber-600">
+                      Not: &quot;Merkez Şube&quot; olarak işaretlenen lokasyonlar işletme sayfasında öncelikli olarak gösterilir.
                     </p>
                   </div>
                   

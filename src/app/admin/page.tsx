@@ -5,10 +5,9 @@ import Link from 'next/link';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { 
-  BuildingOffice2Icon, 
+  BuildingStorefrontIcon, 
   TagIcon, 
-  MapPinIcon, 
-  UserGroupIcon 
+  MapPinIcon
 } from '@heroicons/react/24/outline';
 
 export default function AdminPanel() {
@@ -26,7 +25,7 @@ export default function AdminPanel() {
       id: 'isletmeler',
       title: 'İşletmeler',
       description: 'Tüm işletmeleri görüntüle, düzenle, ekle veya kaldır',
-      icon: BuildingOffice2Icon,
+      icon: BuildingStorefrontIcon,
       color: 'bg-green-100',
       textColor: 'text-green-700',
       link: '/admin/isletmeler'

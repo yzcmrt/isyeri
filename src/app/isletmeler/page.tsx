@@ -1,8 +1,10 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
+import { Navbar } from '@/components/navbar';
+import { Footer } from '@/components/footer';
 import { isletmeler, Isletme } from '@/data/mock-data';
 import { StarIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import { FunnelIcon, ArrowsUpDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
@@ -69,7 +71,7 @@ export default function Isletmeler() {
                   <div className="absolute top-3 left-3">
                     <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow">
                       <Image 
-                        src={isletme.logo.includes('freepik.com') ? '/images/default-logo.png' : isletme.logo} 
+                        src={isletme.logo && isletme.logo.startsWith('http') ? '/images/default-logo.png' : '/images/default-logo.png'} 
                         alt={`${isletme.ad} Logo`} 
                         width={32} 
                         height={32}

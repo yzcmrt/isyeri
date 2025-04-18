@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="tr" suppressHydrationWarning>
       <body className={inter.variable}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          {children}
+        {children}
         </ThemeProvider>
       </body>
     </html>

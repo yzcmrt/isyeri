@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Navbar } from '@/components/navbar';
@@ -146,7 +146,7 @@ export default function YeniKategori() {
                   placeholder="Örn: yeme-icme"
                 />
                 <p className="mt-1 text-xs text-gray-500">
-                  URL'de kullanılacak benzersiz tanımlayıcı. Otomatik oluşturulur, gerekirse düzenleyebilirsiniz.
+                  URL&apos;de kullanılacak benzersiz tanımlayıcı. Otomatik oluşturulur, gerekirse düzenleyebilirsiniz.
                 </p>
                 {errors.slug && <p className="mt-1 text-sm text-red-600">{errors.slug}</p>}
               </div>

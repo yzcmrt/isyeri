@@ -6,9 +6,10 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { motion } from "framer-motion"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
+import { SunIcon, MoonIcon, ChevronDownIcon } from "@heroicons/react/24/outline"
 
 const navigation = [
-  { name: "Ana Sayfa", href: "/" },
   { name: "Kategoriler", href: "/kategoriler" },
   { name: "İşletmeler", href: "/isletmeler" },
   { name: "Hakkımızda", href: "/hakkimizda" },
@@ -17,116 +18,178 @@ const navigation = [
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode)
+  }
+
+  const handleLogout = () => {
+    // Implement the logout logic here
+    console.log("Logout clicked")
+  }
 
   return (
-    <header className="bg-light-background dark:bg-dark-background sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
-      <nav className="container-custom flex items-center justify-between py-4">
-        <div className="flex lg:flex-1">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="font-bold text-2xl tracking-tight">İşYorum</span>
+    <header className="bg-[var(--card-bg)] shadow-sm border-b border-[var(--border)] sticky top-0 z-50">
+      <nav className="container-custom py-4">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
+            <Image src="/logo.svg" alt="İşYorum Logo" width={40} height={40} />
+            <span className="text-xl font-bold text-[var(--foreground)]">İş Yorum</span>
           </Link>
-        </div>
-        
-        <div className="hidden md:flex md:gap-8">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`text-sm font-medium transition-colors hover:text-primary-600 ${
-                pathname === item.href 
-                  ? "text-primary-600 dark:text-primary-400"
-                  : "text-light-text dark:text-dark-text"
-              }`}
-            >
-              {item.name}
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-1">
+            <Link href="/kategoriler" className={`nav-link ${pathname.startsWith('/kategoriler') ? 'nav-link-active' : ''}`}>
+              Kategoriler
             </Link>
-          ))}
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          
-          <Link 
-            href="/giris" 
-            className="hidden md:block btn-outline"
-          >
-            Giriş Yap
-          </Link>
-          
-          <Link 
-            href="/kayit" 
-            className="hidden md:block btn-primary"
-          >
-            Kayıt Ol
-          </Link>
-          
-          <button
-            type="button"
-            className="md:hidden p-2 rounded-md"
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
-      </nav>
-      
-      {/* Mobil Menü */}
-      {mobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-light-background dark:bg-dark-background"
-        >
-          <div className="container-custom py-4 flex justify-between items-center">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="font-bold text-2xl tracking-tight">İşYorum</span>
+            <Link href="/isletmeler" className={`nav-link ${pathname.startsWith('/isletmeler') ? 'nav-link-active' : ''}`}>
+              İşletmeler
             </Link>
-            <button
-              type="button"
-              className="p-2 rounded-md"
-              onClick={() => setMobileMenuOpen(false)}
+            <Link href="/hakkimizda" className={`nav-link ${pathname === '/hakkimizda' ? 'nav-link-active' : ''}`}>
+              Hakkımızda
+            </Link>
+          </div>
+          
+          {/* Auth Actions */}
+          <div className="hidden md:flex items-center space-x-4">
+            <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-full hover:bg-[var(--border)] transition-colors"
+              aria-label={isDarkMode ? 'Açık Temaya Geç' : 'Koyu Temaya Geç'}
             >
-              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+              {isDarkMode ? (
+                <SunIcon className="h-5 w-5 text-[var(--text-body)]" />
+              ) : (
+                <MoonIcon className="h-5 w-5 text-[var(--text-body)]" />
+              )}
+            </button>
+            
+            {isAuthenticated ? (
+              <div className="relative">
+                <button 
+                  className="flex items-center space-x-2 focus:outline-none"
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                >
+                  <div className="w-8 h-8 rounded-full bg-[var(--primary)] text-white flex items-center justify-center font-medium">
+                    M
+                  </div>
+                  <span className="text-[var(--text-body)]">Mert</span>
+                  <ChevronDownIcon className={`w-4 h-4 text-[var(--text-muted)] transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {isProfileOpen && (
+                  <div className="nav-dropdown animate-fade-in">
+                    <Link href="/profil" className="nav-dropdown-item">
+                      Profilim
+                    </Link>
+                    <Link href="/favoriler" className="nav-dropdown-item">
+                      Favorilerim
+                    </Link>
+                    <Link href="/yorumlarim" className="nav-dropdown-item">
+                      Yorumlarım
+                    </Link>
+                    <div className="border-t border-[var(--border)] my-1"></div>
+                    <button 
+                      className="nav-dropdown-item w-full text-left text-[var(--error)]"
+                      onClick={handleLogout}
+                    >
+                      Çıkış Yap
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link href="/giris" className="btn-outline">
+                  Giriş Yap
+                </Link>
+                <Link href="/kayit" className="btn-primary">
+                  Kayıt Ol
+                </Link>
+              </>
+            )}
+          </div>
+          
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center space-x-3">
+            <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-full hover:bg-[var(--border)] transition-colors"
+              aria-label={isDarkMode ? 'Açık Temaya Geç' : 'Koyu Temaya Geç'}
+            >
+              {isDarkMode ? (
+                <SunIcon className="h-5 w-5 text-[var(--text-body)]" />
+              ) : (
+                <MoonIcon className="h-5 w-5 text-[var(--text-body)]" />
+              )}
+            </button>
+            
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-md hover:bg-[var(--border)] transition-colors"
+              aria-label="Menüyü aç/kapat"
+            >
+              {isMobileMenuOpen ? (
+                <XMarkIcon className="h-6 w-6 text-[var(--text-body)]" />
+              ) : (
+                <Bars3Icon className="h-6 w-6 text-[var(--text-body)]" />
+              )}
             </button>
           </div>
-          
-          <div className="container-custom py-8 flex flex-col gap-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`text-lg font-medium transition-colors ${
-                  pathname === item.href 
-                    ? "text-primary-600 dark:text-primary-400"
-                    : "text-light-text dark:text-dark-text"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item.name}
+        </div>
+        
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden pt-4 pb-3 border-t border-[var(--border)] animate-slide-up">
+            <div className="flex flex-col space-y-2">
+              <Link href="/kategoriler" className={`nav-link ${pathname.startsWith('/kategoriler') ? 'nav-link-active' : ''}`}>
+                Kategoriler
               </Link>
-            ))}
-            
-            <div className="flex flex-col gap-4 mt-4">
-              <Link 
-                href="/giris" 
-                className="btn-outline w-full text-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Giriş Yap
+              <Link href="/isletmeler" className={`nav-link ${pathname.startsWith('/isletmeler') ? 'nav-link-active' : ''}`}>
+                İşletmeler
+              </Link>
+              <Link href="/hakkimizda" className={`nav-link ${pathname === '/hakkimizda' ? 'nav-link-active' : ''}`}>
+                Hakkımızda
               </Link>
               
-              <Link 
-                href="/kayit" 
-                className="btn-primary w-full text-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Kayıt Ol
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <div className="divider"></div>
+                  <Link href="/profil" className="nav-link">
+                    Profilim
+                  </Link>
+                  <Link href="/favoriler" className="nav-link">
+                    Favorilerim
+                  </Link>
+                  <Link href="/yorumlarim" className="nav-link">
+                    Yorumlarım
+                  </Link>
+                  <button 
+                    className="text-left px-3 py-2 text-[var(--error)] hover:bg-[var(--border)] rounded-md transition-colors"
+                    onClick={handleLogout}
+                  >
+                    Çıkış Yap
+                  </button>
+                </>
+              ) : (
+                <div className="flex flex-col space-y-2 mt-2 pt-4 border-t border-[var(--border)]">
+                  <Link href="/giris" className="btn-outline w-full text-center">
+                    Giriş Yap
+                  </Link>
+                  <Link href="/kayit" className="btn-primary w-full text-center">
+                    Kayıt Ol
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
-        </motion.div>
-      )}
+        )}
+      </nav>
     </header>
   )
 } 

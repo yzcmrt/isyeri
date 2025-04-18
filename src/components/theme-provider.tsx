@@ -2,13 +2,12 @@
 
 import { createContext, useContext, useEffect, useState } from "react"
 
-type Theme = "light" | "dark" | "system"
+type Theme = "dark" | "light" | "system"
 
 type ThemeProviderProps = {
   children: React.ReactNode
   defaultTheme?: Theme
-  attribute?: string
-  enableSystem?: boolean
+  storageKey?: string
 }
 
 type ThemeProviderState = {
@@ -26,18 +25,24 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  attribute = "data-theme",
-  enableSystem = false,
+  storageKey = "theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(defaultTheme)
+  const [theme, setTheme] = useState<Theme>(
+    () => {
+      if (typeof window !== 'undefined') {
+        return (localStorage.getItem(storageKey) as Theme) || defaultTheme
+      }
+      return defaultTheme
+    }
+  )
 
   useEffect(() => {
     const root = window.document.documentElement
     
     root.classList.remove("light", "dark")
     
-    if (theme === "system" && enableSystem) {
+    if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light"
@@ -47,11 +52,16 @@ export function ThemeProvider({
     }
 
     root.classList.add(theme)
-  }, [theme, enableSystem])
+  }, [theme])
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => setTheme(theme),
+    setTheme: (theme: Theme) => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(storageKey, theme)
+      }
+      setTheme(theme)
+    },
   }
 
   return (

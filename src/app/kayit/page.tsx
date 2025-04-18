@@ -176,15 +176,13 @@ export default function Register() {
               </div>
             </div>
             
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Zaten hesabınız var mı?{" "}
-                <Link 
-                  href="/giris" 
-                  className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
-                >
-                  Giriş Yap
-                </Link>
+            <div className="space-y-1 text-center text-sm text-gray-500 mt-6">
+              <p>
+                Kayıt olarak <Link href="/kullanim-sartlari" className="text-blue-600 hover:text-blue-700">Kullanım Şartları</Link>&apos;nı ve
+                <Link href="/gizlilik-politikasi" className="text-blue-600 hover:text-blue-700"> Gizlilik Politikası</Link>&apos;nı kabul etmiş olursunuz.
+              </p>
+              <p>
+                Zaten hesabınız var mı? <Link href="/giris" className="text-blue-600 hover:text-blue-700">Giriş yapın</Link>
               </p>
             </div>
           </MotionDiv>

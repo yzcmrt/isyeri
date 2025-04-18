@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
+import { Navbar } from '@/components/navbar';
+import { Footer } from '@/components/footer';
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/outline';
 
 const ekipUyeleri = [
@@ -98,15 +98,15 @@ export default function Hakkimizda() {
               </div>
               
               <div className="md:w-1/2">
-                <h3 className="text-2xl font-semibold mb-4">2020'den Beri Yanınızdayız</h3>
+                <h3 className="text-2xl font-semibold mb-4">2020&apos;den Beri Yanınızdayız</h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  2020 yılında, yerel işletmelerin dijital dönüşümüne katkıda bulunmak ve müşterilerin daha bilinçli tercihler yapmasını sağlamak amacıyla yola çıktık. Küçük bir ekiple başladığımız bu yolculukta, bugün Türkiye'nin 81 ilinde binlerce işletmeyi platformumuzda ağırlıyoruz.
+                  2020 yılında, yerel işletmelerin dijital dönüşümüne katkıda bulunmak ve müşterilerin daha bilinçli tercihler yapmasını sağlamak amacıyla yola çıktık. Küçük bir ekiple başladığımız bu yolculukta, bugün Türkiye&apos;nin 81 ilinde binlerce işletmeyi platformumuzda ağırlıyoruz.
                 </p>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
                   Pandemi döneminde işletmelerin dijital varlıklarını güçlendirme ihtiyacı doğrultusunda hızla büyüdük ve geliştirdiğimiz yenilikçi çözümlerle sektörde öncü bir konuma geldik. 
                 </p>
                 <p className="text-gray-700 dark:text-gray-300">
-                  Bugün, kullanıcı odaklı yaklaşımımız, şeffaf değerlendirme sistemimiz ve sürekli genişleyen işletme ağımızla Türkiye'nin en güvenilir işletme rehberi olma yolunda emin adımlarla ilerliyoruz.
+                  Bugün, kullanıcı odaklı yaklaşımımız, şeffaf değerlendirme sistemimiz ve sürekli genişleyen işletme ağımızla Türkiye&apos;nin en güvenilir işletme rehberi olma yolunda emin adımlarla ilerliyoruz.
                 </p>
               </div>
             </div>
