@@ -8,6 +8,8 @@ type ThemeProviderProps = {
   children: React.ReactNode
   defaultTheme?: Theme
   storageKey?: string
+  attribute?: string
+  enableSystem?: boolean
 }
 
 type ThemeProviderState = {
@@ -26,6 +28,8 @@ export function ThemeProvider({
   children,
   defaultTheme = "system",
   storageKey = "theme",
+  attribute = "data-theme",
+  enableSystem = false,
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(

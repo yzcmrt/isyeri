@@ -1,6 +1,4 @@
-"use client"
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Navbar } from '@/components/navbar';
@@ -76,7 +74,7 @@ const kategorilerDetay = {
 };
 
 // Mock işletme verisi
-const isletmeler: MockIsletme[] = [
+const isletmeler = [
   {
     id: "sofram-restaurant",
     kategoriId: "restoranlar",
@@ -192,108 +190,26 @@ const YildizPuani = ({ puan }: { puan: number }) => {
   );
 };
 
-// Kategori Detay Sayfası
-export default function KategoriDetay({ params }: { params: { kategoriId: string } }) {
-  const { kategoriId } = params;
-  const [aramaMetni, setAramaMetni] = useState("");
-  const [seciliAltKategoriler, setSeciliAltKategoriler] = useState<string[]>([]);
-  const [acikMekanlar, setAcikMekanlar] = useState<boolean>(false);
-  const [seciliFiyatSeviyeleri, setSeciliFiyatSeviyeleri] = useState<string[]>([]);
-  const [siralamaKriteri, setSiralamaKriteri] = useState("puan");
-  const [kategori, setKategori] = useState<KategoriData | null>(null);
-  const [filtrelenmisIsletmeler, setFiltrelenmisIsletmeler] = useState<MockIsletme[]>([]);
+// Sayfa parametresi için tip tanımı
+interface PageProps {
+  params: Promise<{
+    kategoriId: string;
+  }>;
+}
+
+// Kategori Detay Sayfası - Server Component
+export default function KategoriDetay({ params }: PageProps) {
+  // Next.js 15.3.1'de params Promise'dir
+  const resolvedParams = React.use(params);
+  const { kategoriId } = resolvedParams;
   
-  // URL parametresinden kategoriyi al
-  useEffect(() => {
-    // Normalde API'den kategori ve işletme verilerini çekersiniz
-    // Şu anda yerel veri kullanıyoruz
-    
-    const bulunanKategori = kategorilerDetay[kategoriId as keyof typeof kategorilerDetay];
-    
-    if (bulunanKategori) {
-      setKategori(bulunanKategori);
-      
-      // İşletmeleri bu kategoriye göre filtrele
-      const kategorininIsletmeleri = isletmeler.filter(
-        isletme => isletme.kategoriId === kategoriId
-      );
-      
-      setFiltrelenmisIsletmeler(kategorininIsletmeleri);
-    } else {
-      setKategori(null);
-      setFiltrelenmisIsletmeler([]);
-    }
-  }, [kategoriId]);
+  // Kategori bilgisini al
+  const kategori = kategorilerDetay[kategoriId as keyof typeof kategorilerDetay] || null;
   
-  // Filtreleme ve sıralama
-  useEffect(() => {
-    if (!kategori) return;
-    
-    let sonuc = isletmeler.filter(isletme => isletme.kategoriId === kategoriId);
-    
-    // Alt kategori filtresi (henüz işletmelerde alt kategori bilgisi olmadığı için iptal edildi)
-    // if (seciliAltKategoriler.length > 0) {
-    //   sonuc = sonuc.filter(isletme => 
-    //     seciliAltKategoriler.some(altKat => isletme.alt_kategoriler.includes(altKat))
-    //   );
-    // }
-    
-    // Sadece açık işletmeler
-    if (acikMekanlar) {
-      sonuc = sonuc.filter(isletme => isletme.acik);
-    }
-    
-    // Fiyat seviyesi filtresi
-    if (seciliFiyatSeviyeleri.length > 0) {
-      sonuc = sonuc.filter(isletme => 
-        seciliFiyatSeviyeleri.includes(isletme.fiyat_seviyesi)
-      );
-    }
-    
-    // Arama metni filtresi
-    if (aramaMetni.trim() !== "") {
-      const arananMetin = aramaMetni.toLowerCase();
-      sonuc = sonuc.filter(isletme => 
-        isletme.ad.toLowerCase().includes(arananMetin) || 
-        isletme.adres.toLowerCase().includes(arananMetin) ||
-        isletme.ozellikler.some(ozellik => ozellik.toLowerCase().includes(arananMetin))
-      );
-    }
-    
-    // Sıralama
-    sonuc.sort((a, b) => {
-      if (siralamaKriteri === "puan") {
-        return b.puan - a.puan;
-      } else if (siralamaKriteri === "yorum") {
-        return b.yorum_sayisi - a.yorum_sayisi;
-      }
-      return 0;
-    });
-    
-    setFiltrelenmisIsletmeler(sonuc);
-  }, [kategori, aramaMetni, seciliAltKategoriler, acikMekanlar, seciliFiyatSeviyeleri, siralamaKriteri, kategoriId]);
-  
-  // Alt kategori seçimi değiştirme
-  const altKategoriToggle = (altKategori: string) => {
-    setSeciliAltKategoriler(prev => {
-      if (prev.includes(altKategori)) {
-        return prev.filter(item => item !== altKategori);
-      } else {
-        return [...prev, altKategori];
-      }
-    });
-  };
-  
-  // Fiyat seviyesi değiştirme
-  const fiyatSeviyesiToggle = (fiyat: string) => {
-    setSeciliFiyatSeviyeleri(prev => {
-      if (prev.includes(fiyat)) {
-        return prev.filter(item => item !== fiyat);
-      } else {
-        return [...prev, fiyat];
-      }
-    });
-  };
+  // İşletmeleri filtrele
+  const filtrelenmisIsletmeler = isletmeler.filter(
+    isletme => isletme.kategoriId === kategoriId
+  );
   
   // Kategori bulunamadıysa
   if (!kategori) {
@@ -359,8 +275,6 @@ export default function KategoriDetay({ params }: { params: { kategoriId: string
                   <input
                     type="text"
                     placeholder="İşletme adı veya özellik ara..."
-                    value={aramaMetni}
-                    onChange={(e) => setAramaMetni(e.target.value)}
                     className="w-full border border-[var(--border)] rounded p-2 pl-10 bg-[var(--input-bg)] text-[var(--text-body)]"
                   />
                   <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
@@ -371,61 +285,26 @@ export default function KategoriDetay({ params }: { params: { kategoriId: string
                 <h2 className="text-lg font-semibold mb-4 text-[var(--foreground)]">Alt Kategoriler</h2>
                 <div className="space-y-2">
                   {kategori.alt_kategoriler.map((altKategori, index) => (
-                    <button
+                    <div
                       key={index}
-                      onClick={() => altKategoriToggle(altKategori)}
-                      className={`flex items-center justify-between w-full px-3 py-2 rounded-md transition-colors ${
-                        seciliAltKategoriler.includes(altKategori)
-                          ? "bg-[var(--primary)] text-white"
-                          : "bg-[var(--card-alt-bg)] text-[var(--text-body)] hover:bg-[var(--primary-light)]"
-                      }`}
+                      className="bg-[var(--card-alt-bg)] text-[var(--text-body)] px-3 py-2 rounded-md hover:bg-[var(--primary-light)] transition-colors"
                     >
                       <span>{altKategori}</span>
-                      {seciliAltKategoriler.includes(altKategori) && (
-                        <div className="h-2 w-2 rounded-full bg-white"></div>
-                      )}
-                    </button>
+                    </div>
                   ))}
                 </div>
               </div>
               
               <div className="bg-[var(--card-bg)] rounded-lg p-5 shadow-sm mb-4">
-                <h2 className="text-lg font-semibold mb-3 text-[var(--foreground)]">Sadece Açık İşletmeler</h2>
-                <div className="relative inline-block w-full mt-2">
-                  <button
-                    onClick={() => setAcikMekanlar(!acikMekanlar)}
-                    className={`flex items-center justify-between w-full px-4 py-2 rounded-md transition-colors ${
-                      acikMekanlar
-                        ? "bg-[var(--primary)] text-white"
-                        : "bg-[var(--card-alt-bg)] text-[var(--text-body)] hover:bg-[var(--primary-light)]"
-                    }`}
-                  >
-                    <span>Açık İşletmeler</span>
-                    {acikMekanlar && (
-                      <div className="h-2 w-2 rounded-full bg-white"></div>
-                    )}
-                  </button>
-                </div>
-              </div>
-              
-              <div className="bg-[var(--card-bg)] rounded-lg p-5 shadow-sm">
                 <h2 className="text-lg font-semibold mb-3 text-[var(--foreground)]">Fiyat Aralığı</h2>
                 <div className="space-y-2 mt-2">
                   {fiyatSeviyeleri.map((fiyat, index) => (
-                    <button
+                    <div
                       key={index}
-                      onClick={() => fiyatSeviyesiToggle(fiyat)}
-                      className={`flex items-center justify-between w-full px-4 py-2 rounded-md transition-colors ${
-                        seciliFiyatSeviyeleri.includes(fiyat)
-                          ? "bg-[var(--primary)] text-white"
-                          : "bg-[var(--card-alt-bg)] text-[var(--text-body)] hover:bg-[var(--primary-light)]"
-                      }`}
+                      className="bg-[var(--card-alt-bg)] text-[var(--text-body)] px-4 py-2 rounded-md hover:bg-[var(--primary-light)] transition-colors"
                     >
                       <span>{fiyat}</span>
-                      {seciliFiyatSeviyeleri.includes(fiyat) && (
-                        <div className="h-2 w-2 rounded-full bg-white"></div>
-                      )}
-                    </button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -433,124 +312,77 @@ export default function KategoriDetay({ params }: { params: { kategoriId: string
             
             {/* Sağ İçerik - İşletme Listesi */}
             <div className="lg:w-3/4">
-              {/* Sıralama */}
-              <div className="bg-[var(--card-bg)] rounded-lg p-4 mb-4 shadow-sm flex items-center justify-between">
-                <div className="flex items-center">
-                  <ArrowsUpDownIcon className="h-5 w-5 text-[var(--text-muted)] mr-2" />
-                  <span className="text-[var(--text-body)]">Sırala:</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setSiralamaKriteri('puan')}
-                    className={`px-3 py-1.5 rounded-md text-sm ${
-                      siralamaKriteri === 'puan'
-                        ? 'bg-[var(--primary)] text-white'
-                        : 'bg-[var(--card-alt-bg)] text-[var(--text-body)] hover:bg-[var(--primary-light)]'
-                    }`}
-                  >
-                    En Yüksek Puan
-                  </button>
-                  <button
-                    onClick={() => setSiralamaKriteri('yorum')}
-                    className={`px-3 py-1.5 rounded-md text-sm ${
-                      siralamaKriteri === 'yorum'
-                        ? 'bg-[var(--primary)] text-white'
-                        : 'bg-[var(--card-alt-bg)] text-[var(--text-body)] hover:bg-[var(--primary-light)]'
-                    }`}
-                  >
-                    En Çok Yorum
-                  </button>
-                </div>
-              </div>
-              
               {/* İşletme Listesi */}
-              {filtrelenmisIsletmeler.length > 0 ? (
-                <div className="space-y-4">
-                  {filtrelenmisIsletmeler.map(isletme => (
-                    <Link key={isletme.id} href={`/isletmeler/${isletme.id}`}>
-                      <div className="bg-[var(--card-bg)] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                        <div className="md:flex">
-                          <div className="md:w-1/3 h-60 md:h-auto relative">
-                            <Image 
-                              src={isletme.kapak_fotografi} 
-                              alt={isletme.ad}
-                              fill
-                              className="object-cover"
-                            />
-                            <div className="absolute top-2 left-2 bg-[var(--card-bg)] px-2 py-1 rounded text-sm font-medium text-[var(--text-body)]">
-                              {isletme.fiyat_seviyesi}
+              <div className="space-y-4">
+                {filtrelenmisIsletmeler.map(isletme => (
+                  <Link key={isletme.id} href={`/isletmeler/${isletme.id}`}>
+                    <div className="bg-[var(--card-bg)] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                      <div className="md:flex">
+                        <div className="md:w-1/3 h-60 md:h-auto relative">
+                          <Image 
+                            src={isletme.kapak_fotografi} 
+                            alt={isletme.ad}
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute top-2 left-2 bg-[var(--card-bg)] px-2 py-1 rounded text-sm font-medium text-[var(--text-body)]">
+                            {isletme.fiyat_seviyesi}
+                          </div>
+                          <div className="absolute top-2 right-2 bg-[var(--card-bg)] px-2 py-1 rounded text-xs text-[var(--text-body)]">
+                            {isletme.fotograf_sayisi} fotoğraf
+                          </div>
+                          {!isletme.acik && (
+                            <div className="absolute bottom-2 left-2 bg-[var(--error)] text-white px-3 py-1 rounded-full text-sm">
+                              Kapalı
                             </div>
-                            <div className="absolute top-2 right-2 bg-[var(--card-bg)] px-2 py-1 rounded text-xs text-[var(--text-body)]">
-                              {isletme.fotograf_sayisi} fotoğraf
+                          )}
+                        </div>
+                        
+                        <div className="md:w-2/3 p-5">
+                          <div className="flex justify-between items-center mb-3">
+                            <h2 className="text-xl font-bold text-[var(--foreground)]">{isletme.ad}</h2>
+                            <div className="flex items-center">
+                              <span className="mr-1 font-semibold text-[var(--foreground)]">{isletme.puan}</span>
+                              <YildizPuani puan={isletme.puan} />
                             </div>
-                            {!isletme.acik && (
-                              <div className="absolute bottom-2 left-2 bg-[var(--error)] text-white px-3 py-1 rounded-full text-sm">
-                                Kapalı
-                              </div>
-                            )}
                           </div>
                           
-                          <div className="md:w-2/3 p-5">
-                            <div className="flex justify-between items-center mb-3">
-                              <h2 className="text-xl font-bold text-[var(--foreground)]">{isletme.ad}</h2>
-                              <div className="flex items-center">
-                                <span className="mr-1 font-semibold text-[var(--foreground)]">{isletme.puan}</span>
-                                <YildizPuani puan={isletme.puan} />
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center text-[var(--text-muted)] mb-4">
-                              <FaMapMarkerAlt className="mr-2" />
-                              <span>{isletme.adres}, {isletme.sehir}</span>
-                            </div>
-                            
-                            <div className="mb-4">
-                              <div className="flex flex-wrap gap-2">
-                                {isletme.ozellikler.slice(0, 4).map((ozellik, index) => (
-                                  <span key={index} className="bg-[var(--card-alt-bg)] px-2 py-1 rounded-md text-xs text-[var(--text-body)]">
-                                    {ozellik}
-                                  </span>
-                                ))}
-                                {isletme.ozellikler.length > 4 && (
-                                  <span className="bg-[var(--card-alt-bg)] px-2 py-1 rounded-md text-xs text-[var(--text-body)]">
-                                    +{isletme.ozellikler.length - 4} daha
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            
-                            <div className="flex justify-between items-center">
-                              <div className="text-sm text-[var(--text-muted)]">
-                                {isletme.yorum_sayisi} değerlendirme
-                              </div>
-                              <div className="text-sm">
-                                <span className={isletme.acik ? "text-[var(--success)]" : "text-[var(--text-muted)]"}>
-                                  {isletme.calisma_saatleri}
+                          <div className="flex items-center text-[var(--text-muted)] mb-4">
+                            <MapPinIcon className="h-4 w-4 mr-2" />
+                            <span>{isletme.adres}, {isletme.sehir}</span>
+                          </div>
+                          
+                          <div className="mb-4">
+                            <div className="flex flex-wrap gap-2">
+                              {isletme.ozellikler.slice(0, 4).map((ozellik, index) => (
+                                <span key={index} className="bg-[var(--card-alt-bg)] px-2 py-1 rounded-md text-xs text-[var(--text-body)]">
+                                  {ozellik}
                                 </span>
-                              </div>
+                              ))}
+                              {isletme.ozellikler.length > 4 && (
+                                <span className="bg-[var(--card-alt-bg)] px-2 py-1 rounded-md text-xs text-[var(--text-body)]">
+                                  +{isletme.ozellikler.length - 4} daha
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="flex justify-between items-center">
+                            <div className="text-sm text-[var(--text-muted)]">
+                              {isletme.yorum_sayisi} değerlendirme
+                            </div>
+                            <div className="text-sm">
+                              <span className={isletme.acik ? "text-[var(--success)]" : "text-[var(--text-muted)]"}>
+                                {isletme.calisma_saatleri}
+                              </span>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-[var(--card-bg)] rounded-lg p-8 text-center text-[var(--text-body)]">
-                  <p className="mb-4 text-lg">Bu kriterlere uygun işletme bulunamadı.</p>
-                  <button
-                    onClick={() => {
-                      setAramaMetni('');
-                      setSeciliAltKategoriler([]);
-                      setAcikMekanlar(false);
-                      setSeciliFiyatSeviyeleri([]);
-                    }}
-                    className="text-[var(--primary)] hover:underline"
-                  >
-                    Tüm filtreleri temizle
-                  </button>
-                </div>
-              )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>

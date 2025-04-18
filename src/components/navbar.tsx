@@ -7,7 +7,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { motion } from "framer-motion"
 import { usePathname } from "next/navigation"
 import Image from "next/image"
-import { SunIcon, MoonIcon, ChevronDownIcon } from "@heroicons/react/24/outline"
+import { ChevronDownIcon } from "@heroicons/react/24/outline"
 
 const navigation = [
   { name: "Kategoriler", href: "/kategoriler" },
@@ -18,14 +18,9 @@ const navigation = [
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-  const [isDarkMode, setIsDarkMode] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode)
-  }
 
   const handleLogout = () => {
     // Implement the logout logic here
@@ -39,7 +34,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <Image src="/logo.svg" alt="İşYorum Logo" width={40} height={40} />
-            <span className="text-xl font-bold text-[var(--foreground)]">İş Yorum</span>
+            <span className="text-xl font-bold text-[var(--foreground)]">İş<span className="text-[var(--primary)]">Yorum</span></span>
           </Link>
           
           {/* Desktop Navigation */}
@@ -57,17 +52,7 @@ export function Navbar() {
           
           {/* Auth Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <button 
-              onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-[var(--border)] transition-colors"
-              aria-label={isDarkMode ? 'Açık Temaya Geç' : 'Koyu Temaya Geç'}
-            >
-              {isDarkMode ? (
-                <SunIcon className="h-5 w-5 text-[var(--text-body)]" />
-              ) : (
-                <MoonIcon className="h-5 w-5 text-[var(--text-body)]" />
-              )}
-            </button>
+            <ThemeToggle />
             
             {isAuthenticated ? (
               <div className="relative">
@@ -117,17 +102,7 @@ export function Navbar() {
           
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-3">
-            <button 
-              onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-[var(--border)] transition-colors"
-              aria-label={isDarkMode ? 'Açık Temaya Geç' : 'Koyu Temaya Geç'}
-            >
-              {isDarkMode ? (
-                <SunIcon className="h-5 w-5 text-[var(--text-body)]" />
-              ) : (
-                <MoonIcon className="h-5 w-5 text-[var(--text-body)]" />
-              )}
-            </button>
+            <ThemeToggle />
             
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
